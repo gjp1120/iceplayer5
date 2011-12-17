@@ -1,0 +1,51 @@
+
+基本上与arch一致：
+	----运行时依赖：
+	wget 	              * 没有将无法下载歌词
+	gtk 		      * 没有将无法运行
+	w3m		      * 没有的话将无法检查更新
+	gstreamer0.10
+	gstreamer0.10-bad
+	gstreamer0.10-bad-plugins
+	gstreamer0.10-base
+	gstreamer0.10-base-plugins
+	gstreamer0.10-ffmpeg  * 没有这个无法播放很多格式
+	gstreamer0.10-good 
+	gstreamer0.10-good-plugins
+	gstreamer0.10-python
+	gstreamer0.10-ugly    * 没有这个会出现进度栏不动的情况
+	gstreamer0.10-ugly-plugins 
+
+	----编译时依赖：
+	gtk2-devel
+	gcc
+	gstreamer-devel
+	GNU make
+
+	----编译安装:
+		|./configure
+		|make
+		|sudo make install
+
+		新的版本：
+		|./build.sh
+		|cd build
+		|sudo make install
+
+
+	----卸载软件:
+		|sudo make uninstall
+
+----rpm类系统遇到问题时，可以联系：
+	Email：gjp1120@gmail.com
+	
+*******如果想用标准的 ./autogen.sh & ./configure & make & make install & checkinstall 请svn google code。
+已不再维护!未来的版本中可能移除
+
+*******如svn无法编译时，请检查文件权限：
+	|ls -l
+
+	注意：configure,autogen.sh,是否可执行
+	如不可执行，解决方法：
+	|chmod +x configure autogen.sh
+

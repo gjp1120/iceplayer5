@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="iceplayer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="iceplayer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="./" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="iceplayer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="./" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/directfb -I/usr/include/libpng12 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -pthread -I/usr/include/gstreamer-0.10 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/libxml2 -I/usr/include/gdk-pixbuf-2.0" />
+			<Add option="-D_REENTRANT" />
+		</Compiler>
+		<Linker>
+			<Add option="-lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0   -lm -lpangocairo-1.0 -lgio-2.0 -lcairo  -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -pthread -lgstreamer-0.10 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lxml2 -lglib-2.0 -lnotify -lX11 -lgdk_pixbuf-2.0 -lpango-1.0" />
+		</Linker>
+		<Unit filename="about.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="about.h" />
+		<Unit filename="common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="common.h" />
+		<Unit filename="configure.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="configure.h" />
+		<Unit filename="core.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="core.h" />
+		<Unit filename="desktop_lrc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="desktop_lrc.h" />
+		<Unit filename="download.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="download.h" />
+		<Unit filename="equalizer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="equalizer.h" />
+		<Unit filename="help.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="help.h" />
+		<Unit filename="id3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="id3.h" />
+		<Unit filename="instance.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="instance.h" />
+		<Unit filename="keybinding.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="keybinding.h" />
+		<Unit filename="list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="list.h" />
+		<Unit filename="lrc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lrc.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mini.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mini.h" />
+		<Unit filename="pl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pl.h" />
+		<Unit filename="pls/update.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pls/update.h" />
+		<Unit filename="single.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="single.h" />
+		<Unit filename="ui.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui.h" />
+		<Unit filename="widget_lrc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="widget_lrc.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,9 +1,8 @@
 #include <gtkmm.h>
-#include "common.h"
+#include "common.hxx"
+
 #define COMMENTS \
   "A Media Player Base On Gstreamer & Gtk From Canton China ! 2010 GPL"
-
-using namespace Gtk;
 
 void show_about_dialog() 
 {
@@ -13,7 +12,7 @@ void show_about_dialog()
 							"gjp1120 gjp1120@gmail.com",
 							NULL };
 
-  AboutDialog *about_dialog = new AboutDialog();
+  Gtk::AboutDialog *about_dialog = new Gtk::AboutDialog();
 
   about_dialog->set_version(version);
   about_dialog->set_name("iceplayer");

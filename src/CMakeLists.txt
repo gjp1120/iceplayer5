@@ -6,17 +6,19 @@ include(FindX11)
 #fixme:这里不知出什么问题了，glib检测老是出错，只能这样解决
 set(CMAKE_INCLUDE_PATH `pkg-config --cflags glib-2.0`)
 
-configure_file(common.h ${CMAKE_CURRENT_BINARY_DIR}/common.h)
+configure_file(common.hxx ${CMAKE_CURRENT_BINARY_DIR}/common.hxx)
+configure_file(common.cpp ${CMAKE_CURRENT_BINARY_DIR}/common.cpp)
 configure_file(about.cpp ${CMAKE_CURRENT_BINARY_DIR}/about.cpp)
 configure_file(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
+configure_file(ui.hxx ${CMAKE_CURRENT_BINARY_DIR}/ui.hxx)
+configure_file(ui.cpp ${CMAKE_CURRENT_BINARY_DIR}/ui.cpp)
+
 #configure_file(equalizer.c ${CMAKE_CURRENT_BINARY_DIR}/equalizer.c)
 #configure_file(core.h ${CMAKE_CURRENT_BINARY_DIR}/core.h)
 #configure_file(keybinding.c ${CMAKE_CURRENT_BINARY_DIR}/keybinding.c)
 #configure_file(single.c ${CMAKE_CURRENT_BINARY_DIR}/single.c)
 #configure_file(list.cpp ${CMAKE_CURRENT_BINARY_DIR}/list.cpp)
 #configure_file(core.cpp ${CMAKE_CURRENT_BINARY_DIR}/core.cpp)
-#configure_file(ui.cpp ${CMAKE_CURRENT_BINARY_DIR}/ui.cpp)
-#configure_file(common.cpp ${CMAKE_CURRENT_BINARY_DIR}/common.cpp)
 #configure_file(id3.c ${CMAKE_CURRENT_BINARY_DIR}/id3.c)
 #configure_file(lrc.cpp ${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp)
 #configure_file(configure.c ${CMAKE_CURRENT_BINARY_DIR}/configure.c)
@@ -36,7 +38,6 @@ configure_file(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
 #configure_file(about.h ${CMAKE_CURRENT_BINARY_DIR}/about.h)
 #configure_file(widget_lrc.h ${CMAKE_CURRENT_BINARY_DIR}/widget_lrc.h)
 #configure_file(id3.h ${CMAKE_CURRENT_BINARY_DIR}/id3.h)
-#configure_file(ui.h ${CMAKE_CURRENT_BINARY_DIR}/ui.h)
 #configure_file(instance.h ${CMAKE_CURRENT_BINARY_DIR}/instance.h)
 #configure_file(desktop_lrc.h ${CMAKE_CURRENT_BINARY_DIR}/desktop_lrc.h)
 #configure_file(download.h ${CMAKE_CURRENT_BINARY_DIR}/download.h)
@@ -49,8 +50,8 @@ set(ICEPLAYER_SRC
 	#${CMAKE_CURRENT_BINARY_DIR}/single.c
 	#${CMAKE_CURRENT_BINARY_DIR}/list.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/core.cpp
-	#${CMAKE_CURRENT_BINARY_DIR}/ui.cpp
-	#${CMAKE_CURRENT_BINARY_DIR}/common.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/ui.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/common.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/id3.c
 	#${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/configure.c
@@ -122,4 +123,4 @@ install(TARGETS iceplayer
     ARCHIVE DESTINATION ${BIN_INSTALL_DIR}
 )
 
-add_subdirectory(pls)
+#add_subdirectory(pls)

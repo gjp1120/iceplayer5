@@ -1,0 +1,2 @@
+/home/GaoJinpei/iceplayer5/build/src/CMakeFiles/iceplayer.dir
+/home/GaoJinpei/iceplayer5/build/CMakeFiles/uninstall.dir

@@ -9,12 +9,11 @@
 #define GETTEXT_PACKAGE "iceplayer"
 #define LOCALEDIR "mo"
 
-extern std::string version;
-
 namespace Iceplayer
 {
-};
+  extern const Glib::ustring version;
 
-void print_err(const gchar *message);
+  void print_err(const Glib::ustring &message);
+};
 
 #endif //__COMMON_HXX

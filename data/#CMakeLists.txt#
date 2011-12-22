@@ -3,17 +3,17 @@ install(
 	iceplayer.png
 	iceplayer_tray.png
 	DESTINATION
-	${datadir}
+	${datadir}/iceplayer
 	)
 
 install(
 	FILES 
 	iceplayer.desktop
 	DESTINATION
-	${sharedir}/applications)
+	${datdir}/applications)
 
 install(DIRECTORY skin
-	    DESTINATION ${datadir}
+	    DESTINATION ${datadir}/iceplayer
 		REGEX ".*.svn" EXCLUDE
 		REGEX "Makefil.*" EXCLUDE)
 

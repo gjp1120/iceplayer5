@@ -6,13 +6,13 @@ include(FindX11)
 #fixme:这里不知出什么问题了，glib检测老是出错，只能这样解决
 set(CMAKE_INCLUDE_PATH `pkg-config --cflags glib-2.0`)
 
-configure_file(common.hxx ${CMAKE_CURRENT_BINARY_DIR}/common.hxx)
-configure_file(common.cpp ${CMAKE_CURRENT_BINARY_DIR}/common.cpp)
-configure_file(about.cpp ${CMAKE_CURRENT_BINARY_DIR}/about.cpp)
-configure_file(main.cpp ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
-configure_file(ui.hxx ${CMAKE_CURRENT_BINARY_DIR}/ui.hxx)
-configure_file(ui.cpp ${CMAKE_CURRENT_BINARY_DIR}/ui.cpp)
+configure_file(common.h ${CMAKE_CURRENT_BINARY_DIR}/common.h)
+configure_file(common.cc ${CMAKE_CURRENT_BINARY_DIR}/common.cc)
+configure_file(main.cc ${CMAKE_CURRENT_BINARY_DIR}/main.cc)
+configure_file(gui.h ${CMAKE_CURRENT_BINARY_DIR}/gui.h)
+configure_file(gui.cc ${CMAKE_CURRENT_BINARY_DIR}/gui.cc)
 
+#configure_file(about.cpp ${CMAKE_CURRENT_BINARY_DIR}/about.cpp)
 #configure_file(equalizer.c ${CMAKE_CURRENT_BINARY_DIR}/equalizer.c)
 #configure_file(core.h ${CMAKE_CURRENT_BINARY_DIR}/core.h)
 #configure_file(keybinding.c ${CMAKE_CURRENT_BINARY_DIR}/keybinding.c)
@@ -44,19 +44,19 @@ configure_file(ui.cpp ${CMAKE_CURRENT_BINARY_DIR}/ui.cpp)
 #configure_file(pl.h ${CMAKE_CURRENT_BINARY_DIR}/pl.h)
 
 set(ICEPLAYER_SRC
-	${CMAKE_CURRENT_BINARY_DIR}/about.cpp
+	#${CMAKE_CURRENT_BINARY_DIR}/about.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/equalizer.c
 	#${CMAKE_CURRENT_BINARY_DIR}/keybinding.c
 	#${CMAKE_CURRENT_BINARY_DIR}/single.c
 	#${CMAKE_CURRENT_BINARY_DIR}/list.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/core.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/ui.cpp
-	${CMAKE_CURRENT_BINARY_DIR}/common.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/gui.cc
+	${CMAKE_CURRENT_BINARY_DIR}/common.cc
 	#${CMAKE_CURRENT_BINARY_DIR}/id3.c
 	#${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/configure.c
 	#${CMAKE_CURRENT_BINARY_DIR}/desktop_lrc.c
-	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/main.cc
 	#${CMAKE_CURRENT_BINARY_DIR}/widget_lrc.c
 	#${CMAKE_CURRENT_BINARY_DIR}/download.c
 	#${CMAKE_CURRENT_BINARY_DIR}/instance.c

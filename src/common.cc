@@ -1,8 +1,9 @@
+// -*- c++ -*-
 #include "common.hxx"
 
-std::string version = "5.0dev1";
+const Glib::ustring Iceplayer::version = "5.0dev1";
 
-void print_err(const gchar *message)
+void Iceplayer::print_err(const Glib::ustring &message)
 {
   Gtk::MessageDialog *mw = new Gtk::MessageDialog(message, false,
 												  Gtk::MESSAGE_ERROR);

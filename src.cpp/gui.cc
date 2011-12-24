@@ -1,6 +1,6 @@
 // -*- c++ -*-
-#include "common.hxx"
-#include "ui.hxx"
+#include "common.h"
+#include "gui.h"
 
 using namespace Iceplayer;
 using namespace Iceplayer::UI;
@@ -8,14 +8,15 @@ using namespace Gtk;
 
 Main_Window::Main_Window()
 {
+  print_programming("UI::Main_Window::Main_Window()");
+
   try
 	{
-	  set_default_icon_from_file("@datadir@/iceplayer.png");
+	  set_default_icon_from_file(ICEPLAYER_ICON);
 	}
   catch(Glib::FileError &e)
 	{
-	  //print_err(_("can't open icon"));
-	  print_err(e.what());
+	  Common::show_err(e.what() + _("\nMain icon load failed!"));
 	}
 
   this->set_title("iceplayer 5 Dev");
@@ -40,60 +41,31 @@ Main_Window::Main_Window()
 
 Main_Window::~Main_Window()
 {
+  print_programming("UI::Main_Window::~Main_Window()");
+
   delete vbox_main;
 }
 
 Gtk::MenuBar *Main_Window::CreateMenuBar()
 {
-  const Glib::ustring menubar_xml = 
-	"<ui>"
-	"  <menubar name='MenuBar'>"
-	"	 <menu action='MusicMenu'>"
-	"	   <menuitem action='New_Playlist'/>"
-	"	   <separator/>"
-	"	   <menuitem action='Add_Music'/>"
-	"	   <menuitem action='Add_Folder'/>"
-	"	   <menuitem action='AutoScan'/>"
-	"	   <separator/>"
-	"	   <menuitem action='Save_Playlist'/>"
-	"	   <separator/>"
-	"	   <menuitem action='Quit'/>"
-	"	 </menu>"
-	"	 <menu action='EditMenu'>"
-	"	   <menuitem action='CutItem'/>"
-	"	   <menuitem action='CopyItem'/>"
-	"	   <menuitem action='PasteItem'/>"
-	"	   <separator/>"
-	"	   <menuitem action='SelectALL'/>"
-	"	   <menuitem action='DeSelectALL'/>"
-	"	   <separator/>"
-	"	   <menu action='Add_to_Playlist'/>"
-	"	   <separator/>"
-	"	   <menuitem action='Remove_from_Playlist'/>"
-	"	   <menuitem action='Delete_from_Disk'/>"
-	"	 </menu>"
-	"	 <menu action='ViewMenu'>"
-	"	   <menuitem action='Mini_Mode'/>"
-	"	   <menuitem action='Fullscreen_Mode'/>"
-	"	 </menu>"
-	"	 <menu action='ControlMenu'>"
-	"	   <menuitem action='Play'/>"
-	"	   <separator/>"
-	"	 </menu>"
-	"	 <menu action='SettingsMenu'>"
-	"	 </menu>"
-	"	 <menu action='HelpMenu'>"
-	"	   <menuitem action='About'/>"
-	"	 </menu>"
-	"  </menubar>"
-	"</ui>";
+  print_programming("UI::Main_Window::CreateMenuBar()");
 
-  mgr->add_ui_from_string(menubar_xml);
+  try
+	{
+	  mgr->add_ui_from_file("./src/mw_menubar.xml");
+	}
+  catch(Glib::FileError &e)
+	{
+	  Common::show_err(e.what() + 
+					   _("\nUI init failed! iceplayer will exit..........."));
+	  exit(-1);
+	}
 
   ///Music:
   mw_actiongroup->add(Action::create("MusicMenu", _("_Music")));
   mw_actiongroup->add(Action::create("New_Playlist", _("New Playlist"),
-									 _("Create a new playlist")));
+									 _("Create a new playlist")),
+					  AccelKey(""), sigc::ptr_fun(&Common::Nonefun));
   mw_actiongroup->add(Action::create("Add_Music", Stock::ADD,
 									 _("Import _File..."),
 									 _("Choose file to be added "
@@ -158,6 +130,8 @@ Gtk::MenuBar *Main_Window::CreateMenuBar()
 
 Gtk::Toolbar *Main_Window::CreateButtonBar()
 {
+  print_programming("UI::Main_Window::CreateButtonBar()");
+
   buttonbar = new Toolbar();
 
   ToolButton *b_play = new ToolButton(Stock::MEDIA_PLAY);
@@ -174,6 +148,8 @@ Gtk::Toolbar *Main_Window::CreateButtonBar()
 
 Gtk::HPaned *Main_Window::CreateMainHPaned()
 {
+  print_programming("UI::Main_Window::CreateMainHPaned()");
+
   hpaned_main = new HPaned();
 
   ScrolledWindow *sw_list_left = new ScrolledWindow();
@@ -195,6 +171,8 @@ Gtk::HPaned *Main_Window::CreateMainHPaned()
 
 void Main_Window::show_aboutdialog()
 {
+  print_programming("UI::Main_Window::show_aboutdialog()");
+
   const gchar *artist[] = {"gjp1120 gjp1120@gmail.com",
 						   "HuangJiaCheng jasy.ice@163.com",
 						   NULL};
@@ -206,7 +184,7 @@ void Main_Window::show_aboutdialog()
 
   AboutDialog *aw = new AboutDialog();
   aw->set_name(GETTEXT_PACKAGE);
-  aw->set_version(version);
+  aw->set_version(Common::version);
   aw->set_license("GPLv3");
   aw->set_artists(artist);
   aw->set_authors(authors);

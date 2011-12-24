@@ -1,10 +1,10 @@
 // -*- c++ -*-
 #include <gtkmm.h>
 
-#include "common.hxx"
+#include "common.h"
 
-#ifndef __UI_HXX
-#define __UI_HXX
+#ifndef __GUI_H
+#define __GUI_H
 
 namespace Iceplayer
 {
@@ -42,4 +42,4 @@ namespace Iceplayer
   };
 };
 
-#endif //__UI_HXX
+#endif //__GUI_H

@@ -11,14 +11,16 @@ configure_file(common.cc ${CMAKE_CURRENT_BINARY_DIR}/common.cc)
 configure_file(main.cc ${CMAKE_CURRENT_BINARY_DIR}/main.cc)
 configure_file(gui.h ${CMAKE_CURRENT_BINARY_DIR}/gui.h)
 configure_file(gui.cc ${CMAKE_CURRENT_BINARY_DIR}/gui.cc)
+configure_file(core.cc ${CMAKE_CURRENT_BINARY_DIR}/core.cc)
+configure_file(core.h ${CMAKE_CURRENT_BINARY_DIR}/core.h)
+configure_file(notify.h ${CMAKE_CURRENT_BINARY_DIR}/notify.h)
+configure_file(notify.cc ${CMAKE_CURRENT_BINARY_DIR}/notify.cc)
 
-#configure_file(about.cpp ${CMAKE_CURRENT_BINARY_DIR}/about.cpp)
 #configure_file(equalizer.c ${CMAKE_CURRENT_BINARY_DIR}/equalizer.c)
 #configure_file(core.h ${CMAKE_CURRENT_BINARY_DIR}/core.h)
 #configure_file(keybinding.c ${CMAKE_CURRENT_BINARY_DIR}/keybinding.c)
 #configure_file(single.c ${CMAKE_CURRENT_BINARY_DIR}/single.c)
 #configure_file(list.cpp ${CMAKE_CURRENT_BINARY_DIR}/list.cpp)
-#configure_file(core.cpp ${CMAKE_CURRENT_BINARY_DIR}/core.cpp)
 #configure_file(id3.c ${CMAKE_CURRENT_BINARY_DIR}/id3.c)
 #configure_file(lrc.cpp ${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp)
 #configure_file(configure.c ${CMAKE_CURRENT_BINARY_DIR}/configure.c)
@@ -44,12 +46,12 @@ configure_file(gui.cc ${CMAKE_CURRENT_BINARY_DIR}/gui.cc)
 #configure_file(pl.h ${CMAKE_CURRENT_BINARY_DIR}/pl.h)
 
 set(ICEPLAYER_SRC
-	#${CMAKE_CURRENT_BINARY_DIR}/about.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/notify.cc
 	#${CMAKE_CURRENT_BINARY_DIR}/equalizer.c
 	#${CMAKE_CURRENT_BINARY_DIR}/keybinding.c
 	#${CMAKE_CURRENT_BINARY_DIR}/single.c
 	#${CMAKE_CURRENT_BINARY_DIR}/list.cpp
-	#${CMAKE_CURRENT_BINARY_DIR}/core.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/core.cc
 	${CMAKE_CURRENT_BINARY_DIR}/gui.cc
 	${CMAKE_CURRENT_BINARY_DIR}/common.cc
 	#${CMAKE_CURRENT_BINARY_DIR}/id3.c
@@ -103,6 +105,7 @@ include_directories(${GTK2_INCLUDE_DIRS})
 add_executable(iceplayer ${ICEPLAYER_SRC})
 #Gtkmm
 include_directories(${GTKMM_INCLUDE_DIRS})
+#include_directories(${LIBNOTIFY_INCLUDE_DIRS})
 
 target_link_libraries(iceplayer 
 	pthread

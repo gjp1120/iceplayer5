@@ -28,8 +28,17 @@
 #define __CONFIG_H
 
 G_BEGIN_DECLS
+;;
 
+gboolean Config_init();
 
+gint Config_getInt(const gchar *);
+const gchar *Config_getStr(const gchar *);
+gboolean Config_getBool(const gchar *);
+
+gboolean Config_setInt(const gchar *, gint32);
+gboolean Config_setStr(const gchar *, const gchar *);
+gboolean Config_setBool(const gchar *, gboolean);
 
 G_END_DECLS
 

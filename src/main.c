@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include "common.h"
 #include "gui.h"
+#include "config.h"
 
 /**
  * SECTION: main
@@ -45,6 +46,7 @@ int main(int argc, char **argv)
   bind_textdomain_codeset(PROG_NAME, "UTF-8");
   textdomain(PROG_NAME);
 
+  Config_init();
   GUI_init();
 
   gtk_main();

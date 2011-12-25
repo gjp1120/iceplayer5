@@ -65,17 +65,22 @@ gint Config_getInt(const gchar *key)
   print_programming("Config::getInt()");
 
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
+  gint32 ret;
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
 
   GVariant *val = dconf_client_read(client, full_key);
-  gint32 ret = g_variant_get_int32(val);
-  g_variant_unref(val);
+  if(val != NULL)
+	{
+	  ret = g_variant_get_int32(val);
+	  g_variant_unref(val);
+	}
+  else 
+	{
+	  ret = 0;
+	  print_err("Config::getInt(): assertion 'val != NULL' failed!");
+	}
 
   g_free(full_key);
   return ret;
@@ -86,19 +91,21 @@ const gchar *Config_getStr(const gchar *key)
   print_programming("Config::getStr()");
 
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
+  const gchar *ret = NULL;
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
 
   GVariant *val = dconf_client_read(client, full_key);
-  const gchar *ret = g_variant_get_string(val, NULL);
-  g_variant_unref(val);
-
-  print_debug(ret);
+  if(val != NULL)
+	{
+	  ret = g_variant_get_string(val, NULL);
+	  g_variant_unref(val);
+	}
+  else
+	{
+	  print_err("Config::getStr(): assertion 'val != NULL' failed!");
+	}
 
   g_free(full_key);
   return ret;
@@ -109,16 +116,21 @@ gboolean Config_getBool(const gchar *key)
   print_programming("Config::getBool()");
 
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
+  gboolean ret = FALSE;
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
+
   GVariant *val = dconf_client_read(client, full_key);
-  gboolean ret = g_variant_get_boolean(val);
-  g_variant_unref(val);
+  if(val != NULL)
+	{
+	  ret = g_variant_get_boolean(val);
+	  g_variant_unref(val);
+	}
+  else
+	{
+	  print_err("Config::getBool(): assertion 'val != NULL' failed!");
+	}
 
   g_free(full_key);
   return ret;
@@ -132,11 +144,7 @@ gboolean Config_setBool(const gchar *key, gboolean _val)
   gboolean ret = TRUE;
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
 
   GVariant *val = g_variant_new_boolean(_val);
@@ -159,11 +167,7 @@ gboolean Config_setInt(const gchar *key, gint32 _val)
   gboolean ret = TRUE;
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
 
   GVariant *val = g_variant_new_int32(_val);
@@ -186,11 +190,7 @@ gboolean Config_setStr(const gchar *key, const gchar *_val)
   gboolean ret = TRUE;
   gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
 
-  if(key[1] == '/')
-	strcpy(full_key, "/apps/iceplayer");
-  else
-	strcpy(full_key, "/apps/iceplayer/");
-
+  strcpy(full_key, "/apps/iceplayer");
   strcat(full_key, key);
 
   GVariant *val = g_variant_new_string(_val);

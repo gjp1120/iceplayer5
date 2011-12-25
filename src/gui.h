@@ -1,7 +1,7 @@
 /*
- * show information about this program
+ * GUI Declaration
  *
- * about.h
+ * gui.h
  * This file is part of <iceplayer>
  *
  * Copyright (C) 2011 - gjp1120, license: GPL v3
@@ -21,11 +21,37 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
+
+#include <gtk/gtk.h>
 #include "common.h"
 
-#ifndef __ABOUT_H
-#define __ABOUT_H
+#ifndef __GUI_H
+#define __GUI_H
 
-void GUI_Dialogs_About(void);
+G_BEGIN_DECLS
 
-#endif //__ABOUT_H
+typedef struct
+{
+  GtkWidget *window_main;
+  GtkWidget *hpaned_main;
+  GtkWidget *treeview_lists; //播放列表列表
+  GtkWidget *treeview_songs; //歌曲列表
+  GtkWidget *statusbar_main;
+
+  //这是用来放置主窗口的警告的
+  GtkWidget *infobar;
+  GtkWidget *infobar_label_title;
+  GtkWidget *infobar_label;
+
+  GtkActionGroup *actiongroup_main;
+  GtkUIManager *uimgr_main;
+}iceplayer_GuiData_t;
+
+gboolean GUI_init(void);
+
+void GUI_MainWindow_showinfo(const gchar *, const gchar *,
+							 const guint, GtkMessageType);
+
+G_END_DECLS
+
+#endif //__GUI_H

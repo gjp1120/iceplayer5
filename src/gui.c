@@ -24,6 +24,7 @@
 #include "gui.h"
 #include "common.h"
 #include "about.h"
+#include "config.h"
 
 /**
  * SECTION: gui
@@ -38,11 +39,34 @@ static const gchar *module_name = "GUI";
 static iceplayer_GuiData_t iceplayer_gui;
 
 /*
- *GtkActionEntry[] iceplayer_mainwindow_menubar:
- *主窗体的MenuBar内容，快捷键以及回调函数
+ * do_window_main_fullscreen():
+ * 
+ * 使主窗口在全屏模式之间切换
  */
 
-static GtkActionEntry iceplayer_mainwindow_menubar[] = 
+static void do_window_main_fullscreen(void)
+{
+  print_programming("GUI::MainWindow::do_fullscreen");
+
+  if(gdk_window_get_state(GDK_WINDOW(iceplayer_gui.window_main->window))
+	 & GDK_WINDOW_STATE_FULLSCREEN)
+	{
+	  gtk_window_unfullscreen(GTK_WINDOW(iceplayer_gui.window_main));
+	}
+  else
+	{
+	  gtk_window_fullscreen(GTK_WINDOW(iceplayer_gui.window_main));
+	}
+}
+
+/*
+ * GtkToggleActionEntry[] iceplayer_mw_menubar_toggleactions:
+ * GtkActionEntry[] iceplayer_mw_menubar_actions:
+ *
+ * 主窗体的MenuBar内容，快捷键以及回调函数
+ */
+
+static GtkActionEntry iceplayer_mw_menubar_actions[] = 
   {
 	{"MusicMenu", NULL, N_("_Music")},
 	{"New_Playlist", NULL, N_("New Playlist"), "<control>N",
@@ -75,8 +99,6 @@ static GtkActionEntry iceplayer_mainwindow_menubar[] =
 	{"ViewMenu", NULL, N_("_View")},
 	{"Mini_Mode", NULL, N_("M_ini Mode"), NULL, 
 	 N_("Make the main window smaller"), NULL},
-	{"Fullscreen_Mode", NULL, N_("_Fullscreen Mode"), NULL,
-	 N_("Make the main window fullscreen"), NULL},
 
 	{"ControlMenu", NULL, N_("_Control")},
 	{"Play", NULL, N_("_Play"), NULL, N_("Start playback"), NULL},
@@ -85,8 +107,22 @@ static GtkActionEntry iceplayer_mainwindow_menubar[] =
 
 	{"HelpMenu", NULL, N_("_Help")},
 	{"About", NULL, N_("_About"), "F1",
-	 N_("Show program info"), G_CALLBACK(iceplayer_gui_show_about_dialog)}
+	 N_("Show program info"), G_CALLBACK(GUI_Dialogs_About)}
   };
+
+//iceplayer_mw_menubar_actions的条目数
+static const gint sz_actions = G_N_ELEMENTS(iceplayer_mw_menubar_actions);
+
+static GtkToggleActionEntry iceplayer_mw_menubar_toggleactions[] = 
+  {
+	{"Fullscreen_Mode", NULL, N_("_Fullscreen Mode"), "F11",
+	 N_("Make the main window fullscreen"), 
+	 G_CALLBACK(do_window_main_fullscreen), FALSE},
+  };
+
+//iceplayer_mw_menubar_toggleactions的条目数
+static const gint sz_toggleactions = \
+  G_N_ELEMENTS(iceplayer_mw_menubar_toggleactions);
 
 /*
  *const gchar *iceplayer_gui_menu_xml:
@@ -143,11 +179,9 @@ static const gchar *iceplayer_gui_menu_xml =
  * 主窗体内容整理
  */
 
-static void GUI_InitMainWindowLayout()
+static void GUI_InitMainWindowLayout(void)
 {
   print_programming("GUI::MainWindow::layout_init()");
-
-  gtk_window_set_default_size(GTK_WINDOW(iceplayer_gui.window_main), 500, 300);
 
   GtkWidget *vbox_main = gtk_vbox_new(FALSE, 0);
   GtkWidget *menubar = \
@@ -155,10 +189,30 @@ static void GUI_InitMainWindowLayout()
 
   gtk_box_pack_start(GTK_BOX(vbox_main), menubar, FALSE, FALSE, 0);
 
+  GtkWidget *sw_tw_lists = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw_tw_lists),
+								 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_lists),
+										iceplayer_gui.treeview_lists);
+
+  GtkWidget *sw_tw_songs = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw_tw_songs),
+								 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_songs),
+										iceplayer_gui.treeview_songs);
+
+  gtk_box_pack_start(GTK_BOX(gtk_info_bar_get_content_area(GTK_INFO_BAR(iceplayer_gui.infobar))), iceplayer_gui.infobar_label_title, FALSE, FALSE, 10);
+  gtk_box_pack_start(GTK_BOX(gtk_info_bar_get_content_area(GTK_INFO_BAR(iceplayer_gui.infobar))), iceplayer_gui.infobar_label, FALSE, FALSE, 10);
+
+  GtkWidget *vbox_list = gtk_vbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_list), iceplayer_gui.infobar,
+					 FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(vbox_list), sw_tw_songs, TRUE, TRUE, 0);
+
   gtk_paned_add1(GTK_PANED(iceplayer_gui.hpaned_main),
-				 iceplayer_gui.treeview_lists);
+				 sw_tw_lists);
   gtk_paned_add2(GTK_PANED(iceplayer_gui.hpaned_main),
-				 iceplayer_gui.treeview_songs);
+				 vbox_list);
   gtk_paned_set_position(GTK_PANED(iceplayer_gui.hpaned_main), 100);
 
   gtk_box_pack_start(GTK_BOX(vbox_main), iceplayer_gui.hpaned_main,
@@ -169,12 +223,31 @@ static void GUI_InitMainWindowLayout()
 }
 
 /**
+ * static GUI_InitMainWindowState():
+ *
+ * 初始化主窗口，菜单中按钮状态
+ */
+
+static void GUI_InitMainWindowState(void)
+{
+  print_programming("GUI::MainWindow::state_init()");
+
+  if(Config_getBool("/UI/window_main_fullscreen"))
+	{
+	  GtkToggleAction *ta = GTK_TOGGLE_ACTION(gtk_action_group_get_action(iceplayer_gui.actiongroup_main, "Fullscreen_Mode"));
+	  gtk_toggle_action_set_active(ta, TRUE);
+	}
+
+  gtk_widget_hide_all(iceplayer_gui.infobar);
+}
+
+/**
  * static GUI_CreateMainWindow():
  *
  * 建立主窗体
  */
 
-static void GUI_CreateMainWindow()
+static void GUI_CreateMainWindow(void)
 {
   print_programming("GUI::MainWindow::init()");
 
@@ -183,15 +256,20 @@ static void GUI_CreateMainWindow()
   iceplayer_gui.window_main = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(iceplayer_gui.window_main),
 					   "iceplayer Dev 5.0");
+  gtk_window_set_default_size(GTK_WINDOW(iceplayer_gui.window_main),
+							  Config_getInt("/UI/window_main_width"),
+							  Config_getInt("/UI/window_main_height"));
 
   //从这里开始，全是初始化UIManager的代码
-  iceplayer_gui.actiongroup_main = gtk_action_group_new("Actions");
+  iceplayer_gui.actiongroup_main = gtk_action_group_new("iceplayer Actions");
   gtk_action_group_set_translation_domain(iceplayer_gui.actiongroup_main,
 										  PROG_NAME);
   gtk_action_group_add_actions(iceplayer_gui.actiongroup_main,
-							   iceplayer_mainwindow_menubar,
-							   G_N_ELEMENTS(iceplayer_mainwindow_menubar),
-							   NULL);
+							   iceplayer_mw_menubar_actions,
+							   sz_actions, NULL);
+  gtk_action_group_add_toggle_actions(iceplayer_gui.actiongroup_main,
+									  iceplayer_mw_menubar_toggleactions,
+									  sz_toggleactions, NULL);
   iceplayer_gui.uimgr_main = gtk_ui_manager_new();
   gtk_ui_manager_insert_action_group(iceplayer_gui.uimgr_main,
 									 iceplayer_gui.actiongroup_main, 0);
@@ -212,14 +290,21 @@ static void GUI_CreateMainWindow()
   iceplayer_gui.treeview_lists = gtk_tree_view_new();
   iceplayer_gui.treeview_songs = gtk_tree_view_new();
   iceplayer_gui.statusbar_main = gtk_statusbar_new();
+  iceplayer_gui.infobar = gtk_info_bar_new();
+  iceplayer_gui.infobar_label_title = gtk_label_new("");
+  iceplayer_gui.infobar_label = gtk_label_new("");
 
   GUI_InitMainWindowLayout();
+
+  gtk_widget_show_all(iceplayer_gui.window_main);
+
+  GUI_InitMainWindowState();
 }
 
 /**
  * GUI_fini():
  *
- * 完成最后的清理工作
+ * 完成最后的清理工作,同时保存GUI状态;
  *
  * Returns: FALSE表示成功
  */
@@ -227,6 +312,24 @@ static void GUI_CreateMainWindow()
 static gboolean GUI_fini(gpointer data)
 {
   print_programming("GUI::quit()");
+  
+  if(gdk_window_get_state(GDK_WINDOW(iceplayer_gui.window_main->window))
+	 & GDK_WINDOW_STATE_FULLSCREEN)
+	{
+	  Config_setBool("/UI/window_main_fullscreen", TRUE);
+	}
+  else
+	{
+	  gint main_window_width = 0;
+	  gint main_window_height = 0;
+
+	  Config_setBool("/UI/window_main_fullscreen", FALSE);
+	  gtk_window_get_size(GTK_WINDOW(iceplayer_gui.window_main),
+						  &main_window_width, &main_window_height);
+	  Config_setInt("/UI/window_main_width", main_window_width);
+	  Config_setInt("/UI/window_main_height", main_window_height);
+	}
+
   return FALSE;
 }
 
@@ -257,7 +360,7 @@ gboolean GUI_init(void)
 
   GUI_CreateMainWindow();
 
-  gtk_widget_show_all(iceplayer_gui.window_main);
+  GUI_MainWindow_showinfo("Welcome to iceplayer!", "", 10, GTK_MESSAGE_INFO);
 
   return TRUE;
 }
@@ -270,7 +373,47 @@ gboolean GUI_init(void)
  * Returns: 到iceplayer_GuiData_t的指针
  */
 
-iceplayer_GuiData_t *GUI_GetData_struct()
+iceplayer_GuiData_t *GUI_GetData_struct(void)
 {
+  print_programming("GUI::GetData_struct()");
+
   return &iceplayer_gui;
+}
+
+/**
+ * static clean_after_showinfo():
+ *
+ * 这个函数仅供GUI_MainWindow_showinfo()调用，用于在定义时间后隐藏InfoBar
+ *
+ * Returns: 一定为FALSE，代表成功
+ */
+
+
+static gboolean clean_after_showinfo(gpointer data)
+{
+  print_programming("GUI::MainWindow::showinfo --> clean_after()");
+  
+  gtk_widget_hide_all(iceplayer_gui.infobar);
+  return FALSE;
+}
+
+/**
+ * GUI_MainWindow_showinfo():
+ *
+ * 在主窗口的InfoBar中显示信息
+ */
+
+void GUI_MainWindow_showinfo(const gchar *title_str, const gchar *info_str,
+							 const guint timeout, GtkMessageType type)
+{
+  print_programming("GUI::MainWindow::showinfo()");
+
+  gtk_label_set_label(GTK_LABEL(iceplayer_gui.infobar_label_title),
+					  title_str);
+  gtk_label_set_label(GTK_LABEL(iceplayer_gui.infobar_label), info_str);
+  gtk_info_bar_set_message_type(GTK_INFO_BAR(iceplayer_gui.infobar), type);
+
+  gtk_widget_show_all(iceplayer_gui.infobar);
+
+  g_timeout_add_seconds(timeout, clean_after_showinfo, NULL);
 }

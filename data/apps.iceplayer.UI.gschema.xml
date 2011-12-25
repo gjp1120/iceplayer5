@@ -1,0 +1,19 @@
+<schemalist>
+  <schema id="apps.iceplayer.UI" path="/apps/iceplayer/UI/">
+	<key name="window_main_height" type="i">
+	  <default> 300 </default>
+	  <summary> MainWindow height </summary>
+	  <description> Iceplayer main window's height </description>
+	</key>
+	<key name="window_main_width" type="i">
+	  <default> 500 </default>
+	  <summary> MainWindow width </summary>
+	  <description> Iceplayer main window's width </description>
+	</key>
+	<key name="window_main_fullscreen" type="b">
+	  <default> false </default>
+	  <summary> MainWindow is fullscreen </summary>
+	  <description> Iceplayer main window is fullscreen or not </description>
+	</key>
+  </schema>
+</schemalist>

@@ -27,9 +27,9 @@
 #define COMMENTS \
   "A Media Player Base On Gstreamer & Gtk From Canton China ! 2010 GPL"
 
-void iceplayer_gui_show_about_dialog()
+void GUI_Dialogs_About(void)
 {
-  print_programming("GUI::show_about_dialog()");
+  print_programming("GUI::Dialogs::About()");
 
   GtkWidget *about_dialog;
 

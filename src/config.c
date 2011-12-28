@@ -22,7 +22,6 @@
  * Boston, MA  02110-1301  USA
  */
 #include "config.h"
-#include <dconf.h>
 
 /**
  * SECTION: config
@@ -35,172 +34,127 @@
  */
 
 static const gchar *module_name = "Config";
-static DConfClient *client;
+static GKeyFile *keyfile;
+static __thread GError *error = NULL;
 
-static void watchfunc(DConfClient *_client, const gchar *path,
-					  const gchar * const * item,
-					  gint n_items,
-					  const gchar *tag,
-					  gpointer data)
+gint Config_getInt(const gchar *group_name, const gchar *key)
 {
-  print_programming("Config::__watchfunc()");
+  print_programming("Config::getInt()");
+
+  gint ret;
+
+  ret = g_key_file_get_integer(keyfile, group_name, key, &error);
+  if(error != NULL)
+	{
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+
+  return ret;
+}
+
+gchar *Config_getStr(const gchar *group_name, const gchar *key)
+{
+  print_programming("Config::getStr()");
+
+  gchar *ret;
+
+  ret = g_key_file_get_string(keyfile, group_name, key, &error);
+  if(error != NULL)
+	{
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+
+  return ret;
+}
+
+gboolean Config_getBool(const gchar *group_name, const gchar *key)
+{
+  print_programming("Config::getBool()");
+
+  gboolean ret;
+
+  ret = g_key_file_get_boolean(keyfile, group_name, key, &error);
+  if(error != NULL)
+	{
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+
+  return ret;
+}
+
+void Config_setBool(const gchar *group_name,const gchar *key, gboolean _val)
+{
+  print_programming("Config::setBool()");
+
+  g_key_file_set_boolean(keyfile, group_name, key, _val);
+}
+
+void Config_setInt(const gchar *group_name, const gchar *key, gint _val)
+{
+  print_programming("Config::setInt()");
+
+  g_key_file_set_integer(keyfile, group_name, key, _val);
+}
+
+void Config_setStr(const gchar *group_name, const gchar *key, const gchar *_val)
+{
+  print_programming("Config::setStr()");
+
+  g_key_file_set_string(keyfile, group_name, key, _val);
+}
+
+gboolean Config_fini(gpointer data)
+{
+  print_programming("Config::fini()");
+
+  gsize length;
+  gchar *temp = g_key_file_to_data(keyfile, &length, &error);
+  if(error != NULL)
+	{
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+  
+  g_file_set_contents("./data/iceplayer.conf", temp, length, &error);
+  if(error != NULL)
+	{
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+
+  g_key_file_free(keyfile);
+
+  return FALSE;
 }
 
 gboolean Config_init()
 {
   print_programming("Config::init()");
 
-  client = dconf_client_new(NULL, watchfunc, NULL, NULL);
-  if(!client)
+  keyfile = g_key_file_new();
+
+  if(!g_key_file_load_from_file(keyfile, "./data/iceplayer.conf",
+								G_KEY_FILE_KEEP_COMMENTS |
+								G_KEY_FILE_KEEP_TRANSLATIONS, &error))
 	{
-	  print_err("Can't init Dconf");
-	  return FALSE;
+	  print_err(error->message);
+	  g_error_free(error);
+	  error = NULL;
+	}
+
+
+  if(!g_key_file_has_group(keyfile, "GUI"))
+	{
+	  print_err("GUI group not found");
 	}
 
   return TRUE;
-}
-
-gint Config_getInt(const gchar *key)
-{
-  print_programming("Config::getInt()");
-
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-  gint32 ret;
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = dconf_client_read(client, full_key);
-  if(val != NULL)
-	{
-	  ret = g_variant_get_int32(val);
-	  g_variant_unref(val);
-	}
-  else 
-	{
-	  ret = 0;
-	  print_err("Config::getInt(): assertion 'val != NULL' failed!");
-	}
-
-  g_free(full_key);
-  return ret;
-}
-
-const gchar *Config_getStr(const gchar *key)
-{
-  print_programming("Config::getStr()");
-
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-  const gchar *ret = NULL;
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = dconf_client_read(client, full_key);
-  if(val != NULL)
-	{
-	  ret = g_variant_get_string(val, NULL);
-	  g_variant_unref(val);
-	}
-  else
-	{
-	  print_err("Config::getStr(): assertion 'val != NULL' failed!");
-	}
-
-  g_free(full_key);
-  return ret;
-}
-
-gboolean Config_getBool(const gchar *key)
-{
-  print_programming("Config::getBool()");
-
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-  gboolean ret = FALSE;
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = dconf_client_read(client, full_key);
-  if(val != NULL)
-	{
-	  ret = g_variant_get_boolean(val);
-	  g_variant_unref(val);
-	}
-  else
-	{
-	  print_err("Config::getBool(): assertion 'val != NULL' failed!");
-	}
-
-  g_free(full_key);
-  return ret;
-}
-
-gboolean Config_setBool(const gchar *key, gboolean _val)
-{
-  print_programming("Config::setBool()");
-
-  GError *err = NULL;
-  gboolean ret = TRUE;
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = g_variant_new_boolean(_val);
-  if(!dconf_client_write(client, full_key, val, NULL, NULL, &err))
-	{
-	  print_err(err->message);
-	  ret = FALSE;
-	}
-
-  g_free(full_key);
-  g_variant_unref(val);
-  return ret;
-}
-
-gboolean Config_setInt(const gchar *key, gint32 _val)
-{
-  print_programming("Config::setInt()");
-
-  GError *err = NULL;
-  gboolean ret = TRUE;
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = g_variant_new_int32(_val);
-  if(!dconf_client_write(client, full_key, val, NULL, NULL, &err))
-	{
-	  print_err(err->message);
-	  ret = FALSE;
-	}
-
-  g_free(full_key);
-  g_variant_unref(val);
-  return ret;
-}
-
-gboolean Config_setStr(const gchar *key, const gchar *_val)
-{
-  print_programming("Config::setStr()");
-
-  GError *err = NULL;
-  gboolean ret = TRUE;
-  gchar *full_key = g_malloc(STRINGS_LENGTH * sizeof(gchar));
-
-  strcpy(full_key, "/apps/iceplayer");
-  strcat(full_key, key);
-
-  GVariant *val = g_variant_new_string(_val);
-  if(!dconf_client_write(client, full_key, val, NULL, NULL, &err))
-	{
-	  print_err(err->message);
-	  ret = FALSE;
-	}
-
-  g_free(full_key);
-  g_variant_unref(val);
-  return ret;
 }

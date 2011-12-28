@@ -1,0 +1,9 @@
+style "MainWindow-style"
+{
+	#bg[NORMAL]	= "#282828"
+}
+
+
+
+widget "iceplayer_WindowMain"	style "MainWindow-style"
+

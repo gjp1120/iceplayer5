@@ -47,6 +47,8 @@ int main(int argc, char **argv)
   textdomain(PROG_NAME);
 
   Config_init();
+  gtk_quit_add(0, Config_fini, NULL);
+
   GUI_init();
 
   gtk_main();

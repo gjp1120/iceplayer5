@@ -37,6 +37,8 @@
 
 static const gchar *module_name = "GUI";
 static iceplayer_GuiData_t iceplayer_gui;
+static __thread GError *error;
+static GtkSettings *settings;
 
 /*
  * do_window_main_fullscreen():
@@ -201,8 +203,17 @@ static void GUI_InitMainWindowLayout(void)
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_songs),
 										iceplayer_gui.treeview_songs);
 
-  gtk_box_pack_start(GTK_BOX(gtk_info_bar_get_content_area(GTK_INFO_BAR(iceplayer_gui.infobar))), iceplayer_gui.infobar_label_title, FALSE, FALSE, 10);
-  gtk_box_pack_start(GTK_BOX(gtk_info_bar_get_content_area(GTK_INFO_BAR(iceplayer_gui.infobar))), iceplayer_gui.infobar_label, FALSE, FALSE, 10);
+  GtkWidget *vbox_infobar = gtk_vbox_new(FALSE, 0);
+
+  gtk_box_pack_start(GTK_BOX(vbox_infobar), iceplayer_gui.infobar_label_title, FALSE, FALSE, 0);
+  GtkWidget *hbox_infobar_msg = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox_infobar_msg),
+					 iceplayer_gui.infobar_label, FALSE, FALSE, 0);
+  gtk_label_set_justify(GTK_LABEL(iceplayer_gui.infobar_label),
+						GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start(GTK_BOX(vbox_infobar), hbox_infobar_msg, FALSE, FALSE, 0);
+
+  gtk_box_pack_start(GTK_BOX(gtk_info_bar_get_content_area(GTK_INFO_BAR(iceplayer_gui.infobar))), vbox_infobar, FALSE, FALSE, 10);
 
   GtkWidget *vbox_list = gtk_vbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(vbox_list), iceplayer_gui.infobar,
@@ -232,7 +243,7 @@ static void GUI_InitMainWindowState(void)
 {
   print_programming("GUI::MainWindow::state_init()");
 
-  if(Config_getBool("/UI/window_main_fullscreen"))
+  if(Config_getBool(module_name, "window_main_is_fullscreen"))
 	{
 	  GtkToggleAction *ta = GTK_TOGGLE_ACTION(gtk_action_group_get_action(iceplayer_gui.actiongroup_main, "Fullscreen_Mode"));
 	  gtk_toggle_action_set_active(ta, TRUE);
@@ -254,11 +265,15 @@ static void GUI_CreateMainWindow(void)
   GError *error;
 
   iceplayer_gui.window_main = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_widget_set_name(iceplayer_gui.window_main, "iceplayer_WindowMain");
   gtk_window_set_title(GTK_WINDOW(iceplayer_gui.window_main),
 					   "iceplayer Dev 5.0");
   gtk_window_set_default_size(GTK_WINDOW(iceplayer_gui.window_main),
-							  Config_getInt("/UI/window_main_width"),
-							  Config_getInt("/UI/window_main_height"));
+							  Config_getInt(module_name, "window_main_width"),
+							  Config_getInt(module_name, "window_main_height"));
+  gtk_window_move(GTK_WINDOW(iceplayer_gui.window_main), 
+				  Config_getInt(module_name, "window_main_x"),
+				  Config_getInt(module_name, "window_main_y"));
 
   //从这里开始，全是初始化UIManager的代码
   iceplayer_gui.actiongroup_main = gtk_action_group_new("iceplayer Actions");
@@ -316,18 +331,26 @@ static gboolean GUI_fini(gpointer data)
   if(gdk_window_get_state(GDK_WINDOW(iceplayer_gui.window_main->window))
 	 & GDK_WINDOW_STATE_FULLSCREEN)
 	{
-	  Config_setBool("/UI/window_main_fullscreen", TRUE);
+	  Config_setBool(module_name, "window_main_is_fullscreen", TRUE);
 	}
   else
 	{
 	  gint main_window_width = 0;
 	  gint main_window_height = 0;
 
-	  Config_setBool("/UI/window_main_fullscreen", FALSE);
+	  gint main_window_x = 0;
+	  gint main_window_y = 0;
+
+	  Config_setBool(module_name, "window_main_is_fullscreen", FALSE);
 	  gtk_window_get_size(GTK_WINDOW(iceplayer_gui.window_main),
 						  &main_window_width, &main_window_height);
-	  Config_setInt("/UI/window_main_width", main_window_width);
-	  Config_setInt("/UI/window_main_height", main_window_height);
+	  gtk_window_get_position(GTK_WINDOW(iceplayer_gui.window_main),
+							  &main_window_x, &main_window_y);
+	  Config_setInt(module_name, "window_main_width", main_window_width);
+	  Config_setInt(module_name, "window_main_height", main_window_height);
+	  Config_setInt(module_name, "window_main_x", main_window_x);
+	  Config_setInt(module_name, "window_main_y", main_window_y);
+	  
 	}
 
   return FALSE;
@@ -346,21 +369,38 @@ gboolean GUI_init(void)
   print_programming("GUI::init()");
 
   static gboolean gui_is_inited = FALSE;
-  GError *error;
 
   if(gui_is_inited) return FALSE;
 
   gtk_quit_add(0, GUI_fini, NULL);
 
+  settings = gtk_settings_get_default();
+
+  if(g_file_test("./data/gtkrc", G_FILE_TEST_IS_REGULAR))
+	{
+	  gtk_rc_add_default_file("./data/gtkrc");
+	  gtk_rc_reparse_all();
+
+	  if(settings != NULL)
+		{
+		  gtk_rc_reparse_all_for_settings(settings, TRUE);
+		}
+	}
+  else
+	{
+	  print_err("./gtkrc不存在!");
+	}
+
   if(!gtk_window_set_default_icon_from_file(ICEPLAYER_ICON, &error))
 	{
 	  print_err(error->message);
 	  g_error_free(error);
+	  error = NULL;
 	}
 
   GUI_CreateMainWindow();
 
-  GUI_MainWindow_showinfo("Welcome to iceplayer!", "", 10, GTK_MESSAGE_INFO);
+  GUI_MainWindow_showinfo("Welcome to iceplayer!", "iceplayer 5.0 Dev1", 10, GTK_MESSAGE_INFO);
 
   return TRUE;
 }
@@ -408,8 +448,12 @@ void GUI_MainWindow_showinfo(const gchar *title_str, const gchar *info_str,
 {
   print_programming("GUI::MainWindow::showinfo()");
 
-  gtk_label_set_label(GTK_LABEL(iceplayer_gui.infobar_label_title),
-					  title_str);
+  gchar *markup_title = \
+	g_markup_printf_escaped("<span weight='bold'>%s</span>", title_str);
+  gtk_label_set_markup(GTK_LABEL(iceplayer_gui.infobar_label_title),
+					   markup_title);
+  g_free(markup_title);
+
   gtk_label_set_label(GTK_LABEL(iceplayer_gui.infobar_label), info_str);
   gtk_info_bar_set_message_type(GTK_INFO_BAR(iceplayer_gui.infobar), type);
 

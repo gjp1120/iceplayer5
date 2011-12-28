@@ -27,19 +27,19 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-G_BEGIN_DECLS
-;;
+G_BEGIN_DECLS;
 
 gboolean Config_init();
+gboolean Config_fini(gpointer);
 
-gint Config_getInt(const gchar *);
-const gchar *Config_getStr(const gchar *);
-gboolean Config_getBool(const gchar *);
+gint Config_getInt(const gchar *, const gchar *);
+gchar *Config_getStr(const gchar *, const gchar *);
+gboolean Config_getBool(const gchar *, const gchar *);
 
-gboolean Config_setInt(const gchar *, gint32);
-gboolean Config_setStr(const gchar *, const gchar *);
-gboolean Config_setBool(const gchar *, gboolean);
+void Config_setInt(const gchar *, const gchar *, gint32);
+void Config_setStr(const gchar *, const gchar *, const gchar *);
+void Config_setBool(const gchar *, const gchar *, gboolean);
 
-G_END_DECLS
+G_END_DECLS;
 
 #endif //__CONFIG_H

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-01 00:49+0800\n"
+"POT-Creation-Date: 2012-01-01 01:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,11 +181,11 @@ msgstr ""
 msgid "Make the main window fullscreen"
 msgstr ""
 
-#: gui.c:429
+#: gui.c:436
 msgid "Welcome to iceplayer!"
 msgstr ""
 
-#: gui.c:429
+#: gui.c:436
 msgid "iceplayer 5.0 Dev1"
 msgstr ""
 

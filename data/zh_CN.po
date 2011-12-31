@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: iceplayer 5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-01 00:40+0800\n"
+"POT-Creation-Date: 2012-01-01 01:02+0800\n"
 "PO-Revision-Date: 2012-01-01 00:15+0800\n"
 "Last-Translator: GaoJinpei <gjp1120@gmail.com>\n"
 "Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
@@ -182,11 +182,11 @@ msgstr "全屏模式(_F)"
 msgid "Make the main window fullscreen"
 msgstr "使主窗口全屏化"
 
-#: gui.c:429
+#: gui.c:436
 msgid "Welcome to iceplayer!"
 msgstr "欢迎使用iceplayer"
 
-#: gui.c:429
+#: gui.c:436
 msgid "iceplayer 5.0 Dev1"
 msgstr "这是iceplayer 5.1开发中版本1"
 

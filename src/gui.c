@@ -25,6 +25,8 @@
 #include "common.h"
 #include "about.h"
 #include "config.h"
+#include "signal.h"
+#include "gui_listview.h"
 
 /**
  * SECTION: gui
@@ -37,7 +39,7 @@
 
 static const gchar *module_name = "GUI";
 static iceplayer_GuiData_t iceplayer_gui;
-static __thread GError *error;
+static __thread GError *error = NULL;
 static GtkSettings *settings;
 
 /*
@@ -48,7 +50,7 @@ static GtkSettings *settings;
 
 static void do_window_main_fullscreen(void)
 {
-  print_programming("GUI::MainWindow::do_fullscreen");
+  print_programming("GUI::MainWindow::do_fullscreen()");
 
   if(gdk_window_get_state(GDK_WINDOW(iceplayer_gui.window_main->window))
 	 & GDK_WINDOW_STATE_FULLSCREEN)
@@ -197,7 +199,7 @@ static void GUI_InitMainWindowLayout(void)
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_lists),
 										iceplayer_gui.treeview_lists);
 
-  GtkWidget *sw_tw_songs = gtk_scrolled_window_new(NULL, NULL);
+GtkWidget *sw_tw_songs = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw_tw_songs),
 								 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_songs),
@@ -224,7 +226,8 @@ static void GUI_InitMainWindowLayout(void)
 				 sw_tw_lists);
   gtk_paned_add2(GTK_PANED(iceplayer_gui.hpaned_main),
 				 vbox_list);
-  gtk_paned_set_position(GTK_PANED(iceplayer_gui.hpaned_main), 100);
+  gtk_paned_set_position(GTK_PANED(iceplayer_gui.hpaned_main),
+						 Config_getInt(module_name, "window_main_paned_pos"));
 
   gtk_box_pack_start(GTK_BOX(vbox_main), iceplayer_gui.hpaned_main,
 					 TRUE, TRUE, 0);
@@ -253,6 +256,22 @@ static void GUI_InitMainWindowState(void)
 }
 
 /**
+ *static GUI_ConnectMainWindowSignals():
+ *
+ *为主窗体和组件连接信号
+ */
+
+static void GUI_ConnectMainWindowSignals(void)
+{
+  print_programming("GUI::MainWindow::connect_signals()");
+
+  struct SignalData{
+	gulong signalID;
+  };
+
+}
+
+/**
  * static GUI_CreateMainWindow():
  *
  * 建立主窗体
@@ -261,8 +280,6 @@ static void GUI_InitMainWindowState(void)
 static void GUI_CreateMainWindow(void)
 {
   print_programming("GUI::MainWindow::init()");
-
-  GError *error;
 
   iceplayer_gui.window_main = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name(iceplayer_gui.window_main, "iceplayer_WindowMain");
@@ -274,6 +291,8 @@ static void GUI_CreateMainWindow(void)
   gtk_window_move(GTK_WINDOW(iceplayer_gui.window_main), 
 				  Config_getInt(module_name, "window_main_x"),
 				  Config_getInt(module_name, "window_main_y"));
+  g_signal_connect(iceplayer_gui.window_main, "delete-event",
+				   gtk_main_quit, NULL);
 
   //从这里开始，全是初始化UIManager的代码
   iceplayer_gui.actiongroup_main = gtk_action_group_new("iceplayer Actions");
@@ -302,14 +321,21 @@ static void GUI_CreateMainWindow(void)
   //到此为止，UIManager完成
 
   iceplayer_gui.hpaned_main = gtk_hpaned_new();
+  gtk_widget_set_name(iceplayer_gui.hpaned_main, "HPaned");
   iceplayer_gui.treeview_lists = gtk_tree_view_new();
+  gtk_widget_set_name(iceplayer_gui.treeview_lists, "TreeViewLists");
   iceplayer_gui.treeview_songs = gtk_tree_view_new();
+  gtk_widget_set_name(iceplayer_gui.treeview_songs, "TreeViewSongs");
+  GUI_InitListViewSongs(iceplayer_gui.treeview_songs);
   iceplayer_gui.statusbar_main = gtk_statusbar_new();
+  gtk_widget_set_name(iceplayer_gui.statusbar_main, "StatusBar");
   iceplayer_gui.infobar = gtk_info_bar_new();
+  gtk_widget_set_name(iceplayer_gui.infobar, "InfoBar");
   iceplayer_gui.infobar_label_title = gtk_label_new("");
   iceplayer_gui.infobar_label = gtk_label_new("");
 
   GUI_InitMainWindowLayout();
+  GUI_ConnectMainWindowSignals();
 
   gtk_widget_show_all(iceplayer_gui.window_main);
 
@@ -350,6 +376,9 @@ static gboolean GUI_fini(gpointer data)
 	  Config_setInt(module_name, "window_main_height", main_window_height);
 	  Config_setInt(module_name, "window_main_x", main_window_x);
 	  Config_setInt(module_name, "window_main_y", main_window_y);
+
+	  Config_setInt(module_name, "window_main_paned_pos",
+					gtk_paned_get_position(GTK_PANED(iceplayer_gui.hpaned_main)));
 	  
 	}
 
@@ -406,16 +435,16 @@ gboolean GUI_init(void)
 }
 
 /**
- * GUI_get_data_struct():
+ * GUI_Get_Datastruct():
  *
  * 仅供内部函数使用，这就是说：不要在插件中调用这个函数，一旦调用，后果自负^_^
  *
  * Returns: 到iceplayer_GuiData_t的指针
  */
 
-iceplayer_GuiData_t *GUI_GetData_struct(void)
+iceplayer_GuiData_t *GUI_Get_Datastruct(void)
 {
-  print_programming("GUI::GetData_struct()");
+  print_programming("GUI::Get_Datastruct()");
 
   return &iceplayer_gui;
 }

@@ -1,10 +1,10 @@
 /*
- * GUI Declaration
+ * 回调函数
  *
- * gui.h
+ * signal.c
  * This file is part of <iceplayer>
  *
- * Copyright (C) 2011 - gjp1120, license: GPL v3
+ * Copyright (C) 2010 - gjp1120, license: GPL v3
  *
  * <iceplayer> is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,39 +21,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
-
-#include <gtk/gtk.h>
 #include "common.h"
+#include "gui.h"
+#include "signal.h"
 
-#ifndef __GUI_H
-#define __GUI_H
+/**
+ * SECTION: signal
+ * @Short_description: 回调函数的实现
+ * @Title: 回调模块
+ * @Include: signal.h
+ *
+ * 负责实现各种回调函数
+ */
 
-G_BEGIN_DECLS;
+static const gchar *module_name = "Signal";
+static __thread GError *error = NULL;
 
-typedef struct
-{
-  GtkWidget *window_main;
-  GtkWidget *hpaned_main;
-  GtkWidget *treeview_lists; //播放列表列表
-  GtkWidget *treeview_songs; //歌曲列表
-  GtkWidget *statusbar_main;
-
-  //这是用来放置主窗口的警告的
-  GtkWidget *infobar;
-  GtkWidget *infobar_label_title;
-  GtkWidget *infobar_label;
-
-  GtkActionGroup *actiongroup_main;
-  GtkUIManager *uimgr_main;
-}iceplayer_GuiData_t;
-
-gboolean GUI_init(void);
-
-void GUI_MainWindow_showinfo(const gchar *, const gchar *,
-							 const guint, GtkMessageType);
-
-iceplayer_GuiData_t *GUI_Get_Datastruct(void);
-
-G_END_DECLS;
-
-#endif //__GUI_H

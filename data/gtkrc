@@ -1,9 +1,42 @@
 style "MainWindow-style"
 {
-	#bg[NORMAL]	= "#282828"
+	bg[NORMAL]	= "#282828"
+	engine "pixmap"
+	{
+		image
+		{
+			function	= FLAT_BOX
+			file		= "window-bg.png"
+			stretch		= FALSE
+			recolorable	= TRUE
+		}
+	}
+}
+
+style "MainWindow_TreeView-style"
+{
+	bg[NORMAL]	= "#282828"
+	text[NORMAL]	= "#F0F0F0"
+	text[PRELIGHT]	= "#F0F0F0"
+	text[ACTIVE]	= "#F0F0F0"
+	text[SELECTED]	= "#F0F0F0"
+	base[NORMAL]	= "#282828"
+	base[PRELIGHT]	= shade (0.8, "#A0A0A0")
+	base[SELECTED]	= shade (0.8, "#A0A0A0")
+	base[ACTIVE]	= shade (0.8, "#A0A0A0")
+	engine "pixmap"
+	{
+		image
+		{
+			function	= FLAT_BOX
+			state		= SELECTED
+			border		= {0, 0, 0, 0}
+			file	= "list-selected.png"
+		}
+	}
 }
 
 
-
-widget "iceplayer_WindowMain"	style "MainWindow-style"
+#widget "iceplayer_WindowMain"	style "MainWindow-style"
+#widget "iceplayer_WindowMain.*.TreeViewLists"	    style "MainWindow_TreeView-style"
 

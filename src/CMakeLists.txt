@@ -15,11 +15,14 @@ configure_file(gui.c ${CMAKE_CURRENT_BINARY_DIR}/gui.c)
 configure_file(main.c ${CMAKE_CURRENT_BINARY_DIR}/main.c)
 configure_file(config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 configure_file(config.c ${CMAKE_CURRENT_BINARY_DIR}/config.c)
+configure_file(signal.h ${CMAKE_CURRENT_BINARY_DIR}/signal.h)
+configure_file(signal.c ${CMAKE_CURRENT_BINARY_DIR}/signal.c)
+configure_file(gui_listview.h ${CMAKE_CURRENT_BINARY_DIR}/gui_listview.h)
+configure_file(gui_listview.c ${CMAKE_CURRENT_BINARY_DIR}/gui_listview.c)
 
 #configure_file(equalizer.c #${CMAKE_CURRENT_BINARY_DIR}/equalizer.c)
 #configure_file(core.h #${CMAKE_CURRENT_BINARY_DIR}/core.h)
 #configure_file(keybinding.c #${CMAKE_CURRENT_BINARY_DIR}/keybinding.c)
-#configure_file(single.c #${CMAKE_CURRENT_BINARY_DIR}/single.c)
 #configure_file(list.cpp #${CMAKE_CURRENT_BINARY_DIR}/list.cpp)
 #configure_file(core.cpp #${CMAKE_CURRENT_BINARY_DIR}/core.cpp)
 #configure_file(ui.cpp #${CMAKE_CURRENT_BINARY_DIR}/ui.cpp)
@@ -36,7 +39,6 @@ configure_file(config.c ${CMAKE_CURRENT_BINARY_DIR}/config.c)
 #configure_file(mini.h #${CMAKE_CURRENT_BINARY_DIR}/mini.h)
 #configure_file(equalizer.h #${CMAKE_CURRENT_BINARY_DIR}/equalizer.h)
 #configure_file(keybinding.h #${CMAKE_CURRENT_BINARY_DIR}/keybinding.h)
-#configure_file(single.h #${CMAKE_CURRENT_BINARY_DIR}/single.h)
 #configure_file(list.h #${CMAKE_CURRENT_BINARY_DIR}/list.h)
 #configure_file(lrc.h #${CMAKE_CURRENT_BINARY_DIR}/lrc.h)
 #configure_file(about.h #${CMAKE_CURRENT_BINARY_DIR}/about.h)
@@ -51,10 +53,11 @@ set(ICEPLAYER_SRC
 	${CMAKE_CURRENT_BINARY_DIR}/about.c
 	#${CMAKE_CURRENT_BINARY_DIR}/equalizer.c
 	#${CMAKE_CURRENT_BINARY_DIR}/keybinding.c
-	#${CMAKE_CURRENT_BINARY_DIR}/single.c
+	${CMAKE_CURRENT_BINARY_DIR}/signal.c
 	#${CMAKE_CURRENT_BINARY_DIR}/list.cpp
 	#${CMAKE_CURRENT_BINARY_DIR}/core.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/gui.c
+	${CMAKE_CURRENT_BINARY_DIR}/gui_listview.c
 	#${CMAKE_CURRENT_BINARY_DIR}/common.c
 	#${CMAKE_CURRENT_BINARY_DIR}/id3.c
 	#${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp

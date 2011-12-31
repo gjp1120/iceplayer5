@@ -54,17 +54,10 @@
 			 TTY_FONT_BLACK ": %s\n", (guint)g_thread_self(), x);
 
 
-#define CHECK_GERROR()							\
-  if(error != NULL)								\
-	{											\
-	  print_err(error->message);				\
-	  error = NULL;								\
-	}
-
-G_BEGIN_DECLS
+G_BEGIN_DECLS;
 
 
 
-G_END_DECLS
+G_END_DECLS;
 
 #endif //__COMMON_H

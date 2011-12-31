@@ -1,0 +1,211 @@
+# Chinese translations for iceplayer package
+# iceplayer 软件包的简体中文翻译.
+# Copyright (C) 2012 THE iceplayer'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the iceplayer package.
+# GaoJinpei <gjp1120@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: iceplayer 5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-01 00:40+0800\n"
+"PO-Revision-Date: 2012-01-01 00:15+0800\n"
+"Last-Translator: GaoJinpei <gjp1120@gmail.com>\n"
+"Language-Team: Chinese (simplified) <translation-team-zh-cn@lists."
+"sourceforge.net>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gui.c:75
+msgid "_Music"
+msgstr "音乐(_M)"
+
+#: gui.c:76
+msgid "New Playlist"
+msgstr "新建播放列表"
+
+#: gui.c:77
+msgid "Create a new playlist"
+msgstr "建立一个新的播放列表"
+
+#: gui.c:78
+msgid "Import _File..."
+msgstr "导入文件(_F)..."
+
+#: gui.c:79
+msgid "Choose file to be added to the Playlist"
+msgstr "选择要加入播放列表的文件"
+
+#: gui.c:80
+msgid "_Import Folder..."
+msgstr "导入文件夹(_I)..."
+
+#: gui.c:81
+msgid "Choose folder to be added to the Playlist"
+msgstr "选择要加入播放列表的文件夹"
+
+#: gui.c:82
+msgid "_Scan Removable Media"
+msgstr "扫描可移动介质(_S)"
+
+#: gui.c:83
+msgid "Scan for new Removable Media"
+msgstr "扫描所有新的可移动介质"
+
+#: gui.c:84
+msgid "_Save to File..."
+msgstr "保存到文件(_S)..."
+
+#: gui.c:85
+msgid "Save a playlist to a file"
+msgstr "把当前列表保存到一个磁盘文件中"
+
+#: gui.c:86
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+#: gui.c:87
+msgid "Quit the iceplayer"
+msgstr "退出iceplayer"
+
+#: gui.c:89
+msgid "_Edit"
+msgstr "编辑(_E)"
+
+#: gui.c:90
+msgid "Cu_t"
+msgstr "剪切(_T)"
+
+#: gui.c:90
+msgid "Cut selection"
+msgstr "剪切选中项"
+
+#: gui.c:91
+msgid "_Copy"
+msgstr "复制(_C)"
+
+#: gui.c:91
+msgid "Copy selection"
+msgstr "复制选中项"
+
+#: gui.c:92
+msgid "_Paste"
+msgstr "粘贴(_P)"
+
+#: gui.c:93
+msgid "Paste selection"
+msgstr "粘贴选中项"
+
+#: gui.c:94
+msgid "Select All"
+msgstr "全选"
+
+#: gui.c:95
+msgid "Select all songs"
+msgstr "选中所有曲目"
+
+#: gui.c:96
+msgid "Deselect All"
+msgstr "全不选"
+
+#: gui.c:97
+msgid "Deselect all songs"
+msgstr "取消所有选中"
+
+#: gui.c:98
+msgid "_Add to Playlist"
+msgstr "添加到播放列表(_A)"
+
+#: gui.c:99
+msgid "Remove from Playlist"
+msgstr "从播放列表移除"
+
+#: gui.c:100
+msgid "Remove each selected song from the playlist"
+msgstr "从播放列表中删除每个选中项"
+
+#: gui.c:101
+msgid "Delete from Disk"
+msgstr "从磁盘上删除"
+
+#: gui.c:102
+msgid "Delete each selected song from the disk"
+msgstr "从磁盘中删除每个选中项(这很危险)"
+
+#: gui.c:104
+msgid "_View"
+msgstr "查看(_V)"
+
+#: gui.c:105
+msgid "M_ini Mode"
+msgstr "迷你模式(_I)"
+
+#: gui.c:106
+msgid "Make the main window smaller"
+msgstr "使播放器主窗口变小"
+
+#: gui.c:108
+msgid "_Control"
+msgstr "控制(_C)"
+
+#: gui.c:109
+msgid "_Play"
+msgstr "播放(_P)"
+
+#: gui.c:109
+msgid "Start playback"
+msgstr "开始回放"
+
+#: gui.c:111
+msgid "Settings"
+msgstr "设置(_S)"
+
+#: gui.c:113
+msgid "_Help"
+msgstr "帮助(_H)"
+
+#: gui.c:114
+msgid "_About"
+msgstr "关于(_A)"
+
+#: gui.c:115
+msgid "Show program info"
+msgstr "显示播放器的版权信息"
+
+#: gui.c:123
+msgid "_Fullscreen Mode"
+msgstr "全屏模式(_F)"
+
+#: gui.c:124
+msgid "Make the main window fullscreen"
+msgstr "使主窗口全屏化"
+
+#: gui.c:429
+msgid "Welcome to iceplayer!"
+msgstr "欢迎使用iceplayer"
+
+#: gui.c:429
+msgid "iceplayer 5.0 Dev1"
+msgstr "这是iceplayer 5.1开发中版本1"
+
+#: gui_listview.c:113
+msgid "Track"
+msgstr "音轨"
+
+#: gui_listview.c:120
+msgid "Title"
+msgstr "标题"
+
+#: gui_listview.c:127
+msgid "Artist"
+msgstr "艺人"
+
+#: gui_listview.c:134
+msgid "Album"
+msgstr "专辑"
+
+#: gui_listview.c:141
+msgid "Length"
+msgstr "长度"

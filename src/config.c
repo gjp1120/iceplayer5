@@ -131,6 +131,7 @@ gboolean Config_fini(gpointer data)
 	}
 
   g_key_file_free(keyfile);
+  keyfile = NULL;
 
   return FALSE;
 }

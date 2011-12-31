@@ -84,12 +84,13 @@ static GtkActionEntry iceplayer_mw_menubar_actions[] =
 	{"Save_Playlist", NULL, N_("_Save to File..."), "<control><alt>S",
 	 N_("Save a playlist to a file"), NULL},
 	{"Quit", NULL, N_("_Quit"), "<control>q",
-	 N_("Quit the iceplayer"), G_CALLBACK(gtk_main_quit)},
+	 N_("Quit the iceplayer"), G_CALLBACK(iceplayer_quit)},
 
 	{"EditMenu", NULL, N_("_Edit")},
 	{"CutItem", NULL, N_("Cu_t"), "<control>X", N_("Cut selection"), NULL},
 	{"CopyItem", NULL, N_("_Copy"), "<control>C", N_("Copy selection"), NULL},
-	{"PasteItem", NULL, N_("_Paste"), "<control>V", N_("Paste selection"), NULL},
+	{"PasteItem", NULL, N_("_Paste"), "<control>V",
+	 N_("Paste selection"), NULL},
 	{"SelectALL", NULL, N_("Select All"), "<control>A",
 	 N_("Select all songs"), NULL},
 	{"DeSelectALL", NULL, N_("Deselect All"), NULL,
@@ -196,18 +197,23 @@ static void GUI_InitMainWindowLayout(void)
   GtkWidget *sw_tw_lists = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw_tw_lists),
 								 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_lists),
-										iceplayer_gui.treeview_lists);
+  gtk_container_add(GTK_CONTAINER(sw_tw_lists), iceplayer_gui.treeview_lists);
 
 GtkWidget *sw_tw_songs = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw_tw_songs),
 								 GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(sw_tw_songs),
-										iceplayer_gui.treeview_songs);
+  gtk_container_add(GTK_CONTAINER(sw_tw_songs), iceplayer_gui.treeview_songs);
 
   GtkWidget *vbox_infobar = gtk_vbox_new(FALSE, 0);
 
-  gtk_box_pack_start(GTK_BOX(vbox_infobar), iceplayer_gui.infobar_label_title, FALSE, FALSE, 0);
+  GtkWidget *hbox_infobar_title = gtk_hbox_new(FALSE, 0);
+  gtk_label_set_justify(GTK_LABEL(iceplayer_gui.infobar_label_title),
+						GTK_JUSTIFY_LEFT);
+  gtk_box_pack_start(GTK_BOX(hbox_infobar_title),
+					 iceplayer_gui.infobar_label_title, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox_infobar), hbox_infobar_title,
+					 FALSE, FALSE, 0);
+
   GtkWidget *hbox_infobar_msg = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(hbox_infobar_msg),
 					 iceplayer_gui.infobar_label, FALSE, FALSE, 0);
@@ -292,7 +298,7 @@ static void GUI_CreateMainWindow(void)
 				  Config_getInt(module_name, "window_main_x"),
 				  Config_getInt(module_name, "window_main_y"));
   g_signal_connect(iceplayer_gui.window_main, "delete-event",
-				   gtk_main_quit, NULL);
+				   G_CALLBACK(iceplayer_quit), NULL);
 
   //从这里开始，全是初始化UIManager的代码
   iceplayer_gui.actiongroup_main = gtk_action_group_new("iceplayer Actions");
@@ -350,7 +356,7 @@ static void GUI_CreateMainWindow(void)
  * Returns: FALSE表示成功
  */
 
-static gboolean GUI_fini(gpointer data)
+gboolean GUI_fini(void)
 {
   print_programming("GUI::quit()");
   
@@ -401,8 +407,6 @@ gboolean GUI_init(void)
 
   if(gui_is_inited) return FALSE;
 
-  gtk_quit_add(0, GUI_fini, NULL);
-
   settings = gtk_settings_get_default();
 
   if(g_file_test("./data/gtkrc", G_FILE_TEST_IS_REGULAR))
@@ -429,7 +433,8 @@ gboolean GUI_init(void)
 
   GUI_CreateMainWindow();
 
-  GUI_MainWindow_showinfo("Welcome to iceplayer!", "iceplayer 5.0 Dev1", 10, GTK_MESSAGE_INFO);
+  GUI_MainWindow_showinfo(_("Welcome to iceplayer!"), _("iceplayer 5.0 Dev1"),
+						  10, GTK_MESSAGE_INFO);
 
   return TRUE;
 }

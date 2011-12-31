@@ -1,7 +1,7 @@
 /*
- * GUI Declaration
+ * COMMON Module
  *
- * gui.h
+ * common.c
  * This file is part of <iceplayer>
  *
  * Copyright (C) 2011 - gjp1120, license: GPL v3
@@ -21,41 +21,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, 
  * Boston, MA  02110-1301  USA
  */
-
-#include <gtk/gtk.h>
 #include "common.h"
+#include "gui.h"
 
-#ifndef __GUI_H
-#define __GUI_H
+static __thread GError *error;
 
-G_BEGIN_DECLS;
-
-typedef struct
+gboolean iceplayer_quit(void)
 {
-  GtkWidget *window_main;
-  GtkWidget *hpaned_main;
-  GtkWidget *treeview_lists; //播放列表列表
-  GtkWidget *treeview_songs; //歌曲列表
-  GtkWidget *statusbar_main;
+  print_programming("::quit()");
 
-  //这是用来放置主窗口的警告的
-  GtkWidget *infobar;
-  GtkWidget *infobar_label_title;
-  GtkWidget *infobar_label;
+  GUI_fini();
+  Config_fini();
+  gtk_main_quit();
 
-  GtkActionGroup *actiongroup_main;
-  GtkUIManager *uimgr_main;
-}iceplayer_GuiData_t;
-
-gboolean GUI_init(void);
-gboolean GUI_fini(void);
-
-void GUI_MainWindow_showinfo(const gchar *, const gchar *,
-							 const guint, GtkMessageType);
-
-iceplayer_GuiData_t *GUI_Get_Datastruct(void);
-
-
-G_END_DECLS;
-
-#endif //__GUI_H
+  return FALSE;
+}

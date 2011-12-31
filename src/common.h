@@ -56,7 +56,7 @@
 
 G_BEGIN_DECLS;
 
-
+gboolean iceplayer_quit(void);
 
 G_END_DECLS;
 

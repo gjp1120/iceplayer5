@@ -40,17 +40,21 @@ int main(int argc, char **argv)
 {
   print_programming("main()");
 
+  print_debug("Gtk::Init()");
   gtk_init(&argc, &argv);
 
   bindtextdomain(PROG_NAME, "@localedir@");
   bind_textdomain_codeset(PROG_NAME, "UTF-8");
   textdomain(PROG_NAME);
 
+  print_debug("Config::Init()");
   Config_init();
-  gtk_quit_add(0, Config_fini, NULL);
 
+  print_debug("GUI::Init()");
   GUI_init();
 
+  print_debug("Gtk::Main::run()");
   gtk_main();
+
   return 0;
 }

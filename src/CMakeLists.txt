@@ -7,7 +7,7 @@ include(FindX11)
 set(CMAKE_INCLUDE_PATH `pkg-config --cflags glib-2.0`)
 
 configure_file(common.h ${CMAKE_CURRENT_BINARY_DIR}/common.h)
-#configure_file(common.c ${CMAKE_CURRENT_BINARY_DIR}/common.c)
+configure_file(common.c ${CMAKE_CURRENT_BINARY_DIR}/common.c)
 configure_file(about.h ${CMAKE_CURRENT_BINARY_DIR}/about.h)
 configure_file(about.c ${CMAKE_CURRENT_BINARY_DIR}/about.c)
 configure_file(gui.h ${CMAKE_CURRENT_BINARY_DIR}/gui.h)
@@ -58,7 +58,7 @@ set(ICEPLAYER_SRC
 	#${CMAKE_CURRENT_BINARY_DIR}/core.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/gui.c
 	${CMAKE_CURRENT_BINARY_DIR}/gui_listview.c
-	#${CMAKE_CURRENT_BINARY_DIR}/common.c
+	${CMAKE_CURRENT_BINARY_DIR}/common.c
 	#${CMAKE_CURRENT_BINARY_DIR}/id3.c
 	#${CMAKE_CURRENT_BINARY_DIR}/lrc.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/config.c

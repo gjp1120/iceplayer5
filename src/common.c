@@ -23,15 +23,17 @@
  */
 #include "common.h"
 #include "gui.h"
+#include "config.h"
 
+static const gchar *module_name = "Common";
 static __thread GError *error;
 
 gboolean iceplayer_quit(void)
 {
-  print_programming("::quit()");
+  print_programming("iceplayer::quit()");
 
   GUI_fini();
-  Config_fini();
+  Config_fini(NULL);
   gtk_main_quit();
 
   return FALSE;

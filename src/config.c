@@ -109,6 +109,14 @@ void Config_setStr(const gchar *group_name, const gchar *key, const gchar *_val)
   g_key_file_set_string(keyfile, group_name, key, _val);
 }
 
+/**
+ * Config_fini():
+ *
+ * 负责收尾工作：将所有配置保存到文件
+ *
+ * Returns: 是否成功结束
+ */
+
 gboolean Config_fini(gpointer data)
 {
   print_programming("Config::fini()");
@@ -135,6 +143,15 @@ gboolean Config_fini(gpointer data)
 
   return FALSE;
 }
+
+/**
+ * Config_init():
+ *
+ * 负责初始化配置系统。
+ * 这个函数应在所有自定义初始化函数之前运行。
+ *
+ * Returns: 初始化是否成功
+ */
 
 gboolean Config_init()
 {

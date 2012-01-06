@@ -1,0 +1,32 @@
+================
+Arch及衍生类系统
+================
+
+安装
+----
+
+运行时依赖
+..........
+Gtk+
+gst0.10及相关插件包
+
+编译时依赖
+..........
+gtk2-devel
+gcc
+gstreamer-devel
+make
+cmake
+libnotify-devel
+
+编译安装
+........
+[iceplayer]$./build.sh
+[iceplayer]$cd Build
+[Build]$sudo make install
+
+卸载软件
+........
+[iceplayer]$cd Build
+[Build]$sudo make uninstall
+

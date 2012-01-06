@@ -1,0 +1,31 @@
+===============
+dpkg包管理系统
+===============
+
+安装(基本上与arch一致)
+----------------------
+
+运行时依赖
+..........
+Gtk+
+gst0.10及相关插件包
+
+编译时依赖
+..........
+gtk2-devel
+gcc
+gstreamer-devel
+make
+cmake
+libnotify-devel
+
+编译安装
+........
+[iceplayer]$./build.sh
+[iceplayer]$cd Build
+[Build]$sudo make install
+
+卸载软件
+........
+[Build]$sudo make uninstall
+

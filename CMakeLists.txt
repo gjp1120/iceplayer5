@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 # uninstall target
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
     IMMEDIATE @ONLY)
 
@@ -31,7 +31,5 @@ set(includedir  ${CMAKE_INSTALL_PREFIX}/include/iceplayer)
 set(CMAKE_C_FLAGS "-Wall -Os ${CMAKE_C_FLAGS}")
 set(CMAKE_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAG}")
 
-add_subdirectory(src)
-#add_subdirectory(tools)
-#add_subdirectory(include)
-add_subdirectory(data)
+add_subdirectory(Sources)
+add_subdirectory(Data)

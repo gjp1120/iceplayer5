@@ -41,17 +41,21 @@
 #define STRINGS_LENGTH 1024
 
 #define print_debug(x)													\
-  g_print(TTY_FONT_YELLOW "Thread&%#x "									\
+  g_print(TTY_FONT_YELLOW "Thread&%#x (%s) "							\
 		  TTY_FONT_BLUE"Debug:"											\
-		  TTY_FONT_BLACK " %s\n", (guint)g_thread_self(), x)
+		  TTY_FONT_BLACK " %s\n", (guint)g_thread_self(),				\
+		  __PRETTY_FUNCTION__, x)
+
 #define print_programming(x)											\
   g_print(TTY_FONT_YELLOW "Thread&%#x "									\
-		  TTY_FONT_GREEN "Programming:"								\
+		  TTY_FONT_GREEN "Programming:"									\
 		  TTY_FONT_BLACK " %s\n", (guint)g_thread_self(), x)
+
 #define print_err(x)													\
-  g_printerr(TTY_FONT_YELLOW "Thread&%#x "								\
+  g_printerr(TTY_FONT_YELLOW "Thread&%#x (%s) "							\
 			 TTY_FONT_RED "*ERROR*"										\
-			 TTY_FONT_BLACK ": %s\n", (guint)g_thread_self(), x);
+			 TTY_FONT_BLACK ": %s\n", (guint)g_thread_self(),			\
+			 __PRETTY_FUNCTION__, x);
 
 
 G_BEGIN_DECLS;

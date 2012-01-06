@@ -1,4 +1,4 @@
 #! /bin/sh
-mkdir build; cd build
+mkdir Build; cd Build
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 make
